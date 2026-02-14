@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>U LOCKER — Reservá ➜ Guardá ➜ Disfrutá</title>
+    <meta name="description" content="U LOCKER: Custodia de equipaje 24hs en Ushuaia. Reservá, guardá y disfrutá la ciudad sin preocupaciones.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00e5ff;
+            --primary-dark: #00b8d4;
+            --accent: #7c4dff;
+            --accent-glow: rgba(124, 77, 255, 0.3);
+            --bg-deep: #050a18;
+            --bg-dark: #0a1628;
+            --bg-card: rgba(14, 26, 52, 0.7);
+            --bg-glass: rgba(255, 255, 255, 0.04);
+            --text-primary: #f0f4ff;
+            --text-secondary: rgba(240, 244, 255, 0.65);
+            --text-muted: rgba(240, 244, 255, 0.4);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --gradient-primary: linear-gradient(135deg, #00e5ff 0%, #7c4dff 100%);
+            --gradient-card: linear-gradient(135deg, rgba(0, 229, 255, 0.08) 0%, rgba(124, 77, 255, 0.08) 100%);
+            --shadow-glow: 0 0 40px rgba(0, 229, 255, 0.15);
+            --radius-xl: 24px;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* ============================================
+           AMBIENT BACKGROUND 
+           ============================================ */
+        .ambient-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .ambient-bg .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            animation: float 20s ease-in-out infinite;
+        }
+        .ambient-bg .orb:nth-child(1) {
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(0, 229, 255, 0.12) 0%, transparent 70%);
+            top: -200px; left: -100px;
+            animation-delay: 0s;
+        }
+        .ambient-bg .orb:nth-child(2) {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(124, 77, 255, 0.1) 0%, transparent 70%);
+            bottom: -150px; right: -100px;
+            animation-delay: -7s;
+        }
+        .ambient-bg .orb:nth-child(3) {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(0, 229, 255, 0.06) 0%, transparent 70%);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -14s;
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -40px) scale(1.05); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+            75% { transform: translate(40px, 30px) scale(1.02); }
+        }
+
+        /* ============================================
+           NAVBAR 
+           ============================================ */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 16px 32px;
+            transition: all 0.4s ease;
+        }
+        .navbar.scrolled {
+            background: rgba(5, 10, 24, 0.85);
+            backdrop-filter: blur(24px) saturate(1.4);
+            -webkit-backdrop-filter: blur(24px) saturate(1.4);
+            border-bottom: 1px solid var(--border-glass);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+        }
+        .navbar-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            box-shadow: var(--shadow-glow);
+        }
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-primary);
+            background: var(--bg-glass);
+        }
+        .nav-cta {
+            padding: 10px 24px !important;
+            background: var(--gradient-primary) !important;
+            color: var(--bg-deep) !important;
+            font-weight: 600 !important;
+            box-shadow: var(--shadow-glow);
+        }
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 50px rgba(0, 229, 255, 0.25) !important;
+        }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+        }
+        .hamburger span {
+            width: 24px;
+            height: 2px;
+            background: var(--text-primary);
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        /* ============================================
+           HERO SECTION
+           ============================================ */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 32px 80px;
+            overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            filter: saturate(0.8);
+        }
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, 
+                rgba(5, 10, 24, 0.4) 0%,
+                rgba(5, 10, 24, 0.7) 50%,
+                rgba(5, 10, 24, 1) 100%
+            );
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 900px;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            backdrop-filter: blur(16px);
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-bottom: 28px;
+            animation: fadeInUp 0.8s ease;
+        }
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+        .hero h1 .gradient-text {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--text-secondary);
+            max-width: 650px;
+            margin: 0 auto 40px;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.6s both;
+        }
+        .btn {
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.35s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+        }
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--bg-deep);
+            box-shadow: var(--shadow-glow);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 50px rgba(0, 229, 255, 0.3);
+        }
+        .btn-glass {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            border: 1px solid var(--border-glass);
+            backdrop-filter: blur(16px);
+        }
+        .btn-glass:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-3px);
+        }
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            animation: bounce 2s ease infinite;
+        }
+        .scroll-indicator .mouse {
+            width: 26px;
+            height: 40px;
+            border: 2px solid var(--text-muted);
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            padding-top: 8px;
+        }
+        .scroll-indicator .mouse .wheel {
+            width: 4px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 4px;
+            animation: scroll-wheel 2s ease infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+        @keyframes scroll-wheel {
+            0%, 100% { opacity: 1; transform: translateY(0); }
+            50% { opacity: 0.3; transform: translateY(6px); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================
+           STEPS SECTION — 3 PASOS
+           ============================================ */
+        .section {
+            position: relative;
+            z-index: 1;
+            padding: 100px 32px;
+        }
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 64px;
+        }
+        .section-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .steps-grid::before {
+            content: '';
+            position: absolute;
+            top: 70px;
+            left: 16.66%;
+            right: 16.66%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            opacity: 0.2;
+            z-index: 0;
+        }
+        .step-card {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 40px 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-xl);
+            backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: default;
+        }
+        .step-card:hover {
+            transform: translateY(-12px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-glow),
+                        inset 0 1px 0 rgba(0, 229, 255, 0.1);
+        }
+        .step-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 28px;
+            background: var(--gradient-card);
+            border: 1px solid rgba(0, 229, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 2.8rem;
+            transition: all 0.4s ease;
+        }
+        .step-card:hover .step-icon {
+            transform: scale(1.1) rotate(5deg);
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.15), rgba(124, 77, 255, 0.15));
+            box-shadow: 0 0 60px rgba(0, 229, 255, 0.15);
+        }
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            color: var(--bg-deep);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+        }
+        .step-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .step-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .step-arrow {
+            position: absolute;
+            top: 70px;
+            right: -28px;
+            font-size: 1.5rem;
+            color: var(--primary);
+            z-index: 2;
+            opacity: 0.5;
+        }
+
+        /* ============================================
+           ABOUT / ¿QUIÉNES SOMOS?
+           ============================================ */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            max-width: 1100px;
+            margin: 0 auto;
+            align-items: center;
+        }
+        .about-image {
+            position: relative;
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            aspect-ratio: 4/3;
+        }
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+        .about-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-xl);
+            pointer-events: none;
+        }
+        .about-text h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 24px;
+        }
+        .about-text p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            margin-bottom: 20px;
+        }
+        .about-text p strong {
+            color: var(--text-primary);
+        }
+        .feature-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 28px;
+        }
+        .pill {
+            padding: 10px 20px;
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 40px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        .pill:hover {
+            border-color: var(--primary);
+            background: rgba(0, 229, 255, 0.06);
+        }
+        .pill-icon {
+            font-size: 1.2rem;
+        }
+
+        /* ============================================
+           SERVICES / ¿QUÉ OFRECEMOS?
+           ============================================ */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .service-card {
+            padding: 36px 28px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-xl);
+            backdrop-filter: blur(20px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .service-card:hover::before {
+            opacity: 1;
+        }
+        .service-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0, 229, 255, 0.2);
+            box-shadow: var(--shadow-glow);
+        }
+        .service-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            background: var(--gradient-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 229, 255, 0.1);
+        }
+        .service-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .service-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* ============================================
+           WHY US / ¿POR QUÉ?
+           ============================================ */
+        .why-section {
+            background: linear-gradient(180deg, transparent, rgba(0, 229, 255, 0.02), transparent);
+        }
+        .why-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .why-quote {
+            position: relative;
+            padding: 48px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-xl);
+            backdrop-filter: blur(20px);
+            margin-bottom: 48px;
+        }
+        .why-quote::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            left: 32px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 6rem;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+        .why-quote p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 32px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-xl);
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+        .stat-item:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+        }
+        .stat-number {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* ============================================
+           SOCIAL / REDES SOCIALES
+           ============================================ */
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .social-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 24px 28px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-lg);
+            backdrop-filter: blur(20px);
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.4s ease;
+        }
+        .social-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-glow);
+        }
+        .social-card .social-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        .social-card .social-icon.ig {
+            background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+        }
+        .social-card .social-icon.fb {
+            background: #1877f2;
+        }
+        .social-card .social-icon.wa {
+            background: #25d366;
+        }
+        .social-card .social-icon.web {
+            background: var(--gradient-primary);
+        }
+        .social-card .social-info h4 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        .social-card .social-info span {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        footer {
+            padding: 48px 32px;
+            border-top: 1px solid var(--border-glass);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        footer .footer-brand {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        footer .footer-bottom {
+            margin-top: 16px;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* ============================================
+           SCROLL REVEAL / INTERSECTION
+           ============================================ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal.delay-1 { transition-delay: 0.1s; }
+        .reveal.delay-2 { transition-delay: 0.2s; }
+        .reveal.delay-3 { transition-delay: 0.3s; }
+        .reveal.delay-4 { transition-delay: 0.4s; }
+
+        /* ============================================
+           MOBILE / RESPONSIVE
+           ============================================ */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                right: 16px;
+                background: rgba(10, 22, 40, 0.95);
+                backdrop-filter: blur(24px);
+                border: 1px solid var(--border-glass);
+                border-radius: var(--radius-lg);
+                padding: 16px;
+                flex-direction: column;
+                min-width: 200px;
+            }
+            .nav-links.open { display: flex; }
+            .hamburger { display: flex; }
+            .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+            .hamburger.open span:nth-child(2) { opacity: 0; }
+            .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+            .steps-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .steps-grid::before { display: none; }
+            .step-arrow { display: none; }
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .section {
+                padding: 64px 20px;
+            }
+            .why-quote {
+                padding: 32px 24px;
+            }
+        }
+
+        /* ============================================
+           PARALLAX TILT ON CARDS
+           ============================================ */
+        .tilt-card {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Background -->
+    <div class="ambient-bg">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+    </div>
+
+    <!-- ====== NAVBAR ====== -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-inner">
+            <a href="#" class="logo">
+                <div class="logo-icon">🔐</div>
+                <span>U LOCKER</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#pasos">Cómo funciona</a></li>
+                <li><a href="#nosotros">Nosotros</a></li>
+                <li><a href="#servicios">Servicios</a></li>
+                <li><a href="#porqué">Por qué</a></li>
+                <li><a href="#redes">Contacto</a></li>
+                <li><a href="https://ulocker.com" target="_blank" class="nav-cta">Reservar ahora</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ====== HERO ====== -->
+    <section class="hero" id="hero">
+        <div class="hero-bg">
+            <img src="hero.png" alt="U Locker Ushuaia" loading="eager">
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="dot"></span>
+                Ushuaia · Tierra del Fuego
+            </div>
+            <h1>
+                <span class="gradient-text">Reservá ➜ Guardá ➜ Disfrutá</span>
+            </h1>
+            <p>🎯 En solo 3 acciones, liberá tu tiempo y explorá sin límites. Servicio de custodia de equipaje 24hs en el fin del mundo.</p>
+            <div class="hero-actions">
+                <a href="#pasos" class="btn btn-primary">
+                    <span>Cómo funciona</span>
+                    <span>→</span>
+                </a>
+                <a href="#nosotros" class="btn btn-glass">
+                    <span>Conocenos</span>
+                </a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== 3 PASOS ====== -->
+    <section class="section" id="pasos">
+        <div class="section-header reveal">
+            <p class="section-label">Cómo funciona</p>
+            <h2 class="section-title">3 simples pasos para tu libertad</h2>
+            <p class="section-subtitle">Sin complicaciones. Sin preocupaciones. Solo disfrutá.</p>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card reveal delay-1 tilt-card">
+                <div class="step-icon">📅</div>
+                <span class="step-number">1</span>
+                <h3>Reservá</h3>
+                <p>Elegí el tamaño del locker, la fecha y el horario que necesitás. Todo 100% online desde tu celular.</p>
+                <span class="step-arrow">➜</span>
+            </div>
+            <div class="step-card reveal delay-2 tilt-card">
+                <div class="step-icon">🔐</div>
+                <span class="step-number">2</span>
+                <h3>Guardá</h3>
+                <p>Dejá tu equipaje en nuestros lockers seguros, con vigilancia 24/7 y acceso controlado digitalmente.</p>
+                <span class="step-arrow">➜</span>
+            </div>
+            <div class="step-card reveal delay-3 tilt-card">
+                <div class="step-icon">🏔️</div>
+                <span class="step-number">3</span>
+                <h3>Disfrutá</h3>
+                <p>Explorá Ushuaia ligeramente. Gastronomía, paisajes, trekking — sin cargar con nada.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== ¿QUIÉNES SOMOS? ====== -->
+    <section class="section" id="nosotros">
+        <div class="about-grid">
+            <div class="about-image reveal">
+                <img src="hero.png" alt="U Locker — Ushuaia">
+            </div>
+            <div class="about-text reveal delay-2">
+                <p class="section-label">¿Quiénes somos?</p>
+                <h2>Un emprendimiento<br>familiar <span class="gradient-text" style="-webkit-text-fill-color: transparent; background: var(--gradient-primary); -webkit-background-clip: text; background-clip: text;">fueguino</span></h2>
+                <p><strong>U LOCKER</strong> es un emprendimiento familiar fueguino, creado con recursos locales y pensado para atender las necesidades de nuestra capital, un destino tan valorado por viajeros de todo el mundo.</p>
+                <p>Lo que comenzó como un sueño, hoy es un servicio de primera línea, comparable con lo mejor que se ofrece a nivel internacional.</p>
+                <div class="feature-pills">
+                    <div class="pill"><span class="pill-icon">🇦🇷</span> Hecho en Ushuaia</div>
+                    <div class="pill"><span class="pill-icon">⏰</span> 24 horas</div>
+                    <div class="pill"><span class="pill-icon">🔒</span> Seguridad total</div>
+                    <div class="pill"><span class="pill-icon">📱</span> 100% digital</div>
+                    <div class="pill"><span class="pill-icon">🌍</span> Nivel internacional</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== ¿QUÉ OFRECEMOS? ====== -->
+    <section class="section" id="servicios">
+        <div class="section-header reveal">
+            <p class="section-label">Nuestros servicios</p>
+            <h2 class="section-title">¿Qué ofrecemos?</h2>
+            <p class="section-subtitle">Servicio de custodia de equipaje disponible las 24 horas para tu tranquilidad.</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card reveal delay-1 tilt-card">
+                <div class="service-icon">🧳</div>
+                <h3>Custodia de equipaje</h3>
+                <p>Guardá tu equipaje en lockers seguros y de diferentes tamaños, para todo tipo de valija o mochila.</p>
+            </div>
+            <div class="service-card reveal delay-2 tilt-card">
+                <div class="service-icon">🕐</div>
+                <h3>Disponible 24hs</h3>
+                <p>¿Llegás de madrugada o te vas tarde? No importa. Nuestro servicio está siempre activo para vos.</p>
+            </div>
+            <div class="service-card reveal delay-3 tilt-card">
+                <div class="service-icon">📲</div>
+                <h3>Reserva digital</h3>
+                <p>Reservá desde tu celular, elegí el tamaño, la fecha y listo. Sin necesidad de hacer cola.</p>
+            </div>
+            <div class="service-card reveal delay-4 tilt-card">
+                <div class="service-icon">🛡️</div>
+                <h3>Seguridad premium</h3>
+                <p>Vigilancia constante, cámaras de seguridad y acceso controlado digitalmente para tu tranquilidad total.</p>
+            </div>
+            <div class="service-card reveal delay-1 tilt-card">
+                <div class="service-icon">📍</div>
+                <h3>Ubicación estratégica</h3>
+                <p>Situados en el centro de Ushuaia, accesibles desde cualquier punto turístico de la ciudad.</p>
+            </div>
+            <div class="service-card reveal delay-2 tilt-card">
+                <div class="service-icon">🤝</div>
+                <h3>Agencias Plus</h3>
+                <p>Programa especial para agencias de turismo y referidos con beneficios exclusivos de colaboración.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== ¿POR QUÉ? ====== -->
+    <section class="section why-section" id="porqué">
+        <div class="section-header reveal">
+            <p class="section-label">Nuestra visión</p>
+            <h2 class="section-title">¿Por qué U LOCKER?</h2>
+        </div>
+        <div class="why-content">
+            <div class="why-quote reveal">
+                <p>Ushuaia es uno de los destinos turísticos preponderantes en el mundo y como emprendedores fueguinos hemos observado la transformación en la oferta Hotelera, Gastronómica, Logística y de Servicios hacia el turismo.</p>
+                <br>
+                <p>Consideramos que <strong style="color: var(--primary);">U Locker es un servicio accesorio intermedio</strong> para que el turista esté cómodo, mientras pasea, consume o disfruta Ushuaia.</p>
+                <br>
+                <p>Por más de un año, invertimos tiempo y capital porque nuestra marca y desarrollo informático no se encontraba disponible bajo el modelo de negocio y prestaciones que hoy podemos ofrecer.</p>
+            </div>
+            <div class="stats-row">
+                <div class="stat-item reveal delay-1">
+                    <div class="stat-number" data-target="24">0</div>
+                    <div class="stat-label">Horas de servicio</div>
+                </div>
+                <div class="stat-item reveal delay-2">
+                    <div class="stat-number" data-target="365">0</div>
+                    <div class="stat-label">Días al año</div>
+                </div>
+                <div class="stat-item reveal delay-3">
+                    <div class="stat-number" data-target="100">0</div>
+                    <div class="stat-label">% Digital</div>
+                </div>
+                <div class="stat-item reveal delay-4">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Compromiso</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== REDES SOCIALES ====== -->
+    <section class="section" id="redes">
+        <div class="section-header reveal">
+            <p class="section-label">Conectá con nosotros</p>
+            <h2 class="section-title">Nuestras redes sociales</h2>
+            <p class="section-subtitle">Seguinos y mantenete al tanto de novedades, promociones y más.</p>
+        </div>
+        <div class="social-grid">
+            <a href="https://instagram.com/ulocker" target="_blank" class="social-card reveal delay-1">
+                <div class="social-icon ig">📸</div>
+                <div class="social-info">
+                    <h4>Instagram</h4>
+                    <span>@ulocker</span>
+                </div>
+            </a>
+            <a href="https://facebook.com/ulocker" target="_blank" class="social-card reveal delay-2">
+                <div class="social-icon fb">👍</div>
+                <div class="social-info">
+                    <h4>Facebook</h4>
+                    <span>/ulocker</span>
+                </div>
+            </a>
+            <a href="https://wa.me/5492901234567" target="_blank" class="social-card reveal delay-3">
+                <div class="social-icon wa">💬</div>
+                <div class="social-info">
+                    <h4>WhatsApp</h4>
+                    <span>Escribinos</span>
+                </div>
+            </a>
+            <a href="https://ulocker.com" target="_blank" class="social-card reveal delay-4">
+                <div class="social-icon web">🌐</div>
+                <div class="social-info">
+                    <h4>Web</h4>
+                    <span>ulocker.com</span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- ====== FOOTER ====== -->
+    <footer>
+        <div class="footer-brand">🔐 U LOCKER</div>
+        <p>Custodia de equipaje 24hs — Ushuaia, Tierra del Fuego, Argentina</p>
+        <div class="footer-bottom">
+            <span>© 2026 U LOCKER</span>
+            <span>·</span>
+            <span>Emprendimiento familiar fueguino</span>
+        </div>
+    </footer>
+
+    <script>
+        // ====== NAVBAR SCROLL ======
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // ====== MOBILE MENU ======
+        function toggleMenu() {
+            document.getElementById('navLinks').classList.toggle('open');
+            document.getElementById('hamburger').classList.toggle('open');
+        }
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navLinks').classList.remove('open');
+                document.getElementById('hamburger').classList.remove('open');
+            });
+        });
+
+        // ====== SCROLL REVEAL ======
+        const revealEls = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+        revealEls.forEach(el => revealObserver.observe(el));
+
+        // ====== COUNTER ANIMATION ======
+        const counters = document.querySelectorAll('.stat-number[data-target]');
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const target = +el.getAttribute('data-target');
+                    let current = 0;
+                    const increment = target / 60;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            el.textContent = target;
+                            clearInterval(timer);
+                        } else {
+                            el.textContent = Math.ceil(current);
+                        }
+                    }, 25);
+                    counterObserver.unobserve(el);
+                }
+            });
+        }, { threshold: 0.5 });
+        counters.forEach(c => counterObserver.observe(c));
+
+        // ====== TILT EFFECT ON CARDS ======
+        document.querySelectorAll('.tilt-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / centerY * -6;
+                const rotateY = (x - centerX) / centerX * 6;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+            });
+        });
+
+        // ====== SMOOTH SCROLL ======
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // ====== ACTIVE NAV LINK ======
+        const sections = document.querySelectorAll('section[id]');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.pageYOffset + 150;
+            sections.forEach(section => {
+                const top = section.offsetTop;
+                const height = section.offsetHeight;
+                const id = section.getAttribute('id');
+                const link = document.querySelector(`.nav-links a[href="#${id}"]`);
+                if (link) {
+                    if (scrollY >= top && scrollY < top + height) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
